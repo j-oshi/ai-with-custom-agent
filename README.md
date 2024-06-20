@@ -5,16 +5,18 @@ Ai with custom agent to solve local task.
 Install and pull down model
 
 ## Run query 
-Start by ```bash
+Start by 
+```bash
 py agents/agent.py
 ```
 
-## Running the Tests
+## Running unittests
 To run the tests, navigate to the root of your project in the terminal and run:
 ```bash
 py -m unittest discover -s tests
 ```
 
+## Folder structure
 ```
 ai_with_custom_agent
 ├─ ai_assistants
