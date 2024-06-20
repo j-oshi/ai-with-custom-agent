@@ -76,9 +76,17 @@ if __name__ == "__main__":
         assistant_folder_path=assistant_folder_path,
         excluded_files=excluded_files,
     )
-    response = agent.execute_prompt('What is capital of the united states?')
+    # response = agent.execute_prompt('What is capital of the united states?')
     # response = agent.execute_prompt(
     #     "If a principal amount of $5000 is invested at a fixed annual interest rate of 2.5% for a period of 3 years, what is the totalCostOfMortgage?"
     # )
-    print(response)
+    # print(response)
+
+    while True:
+        prompt = input("Enter prompt here: ")
+        if prompt.lower() == "exit":
+            break
+    
+        response = agent.execute_prompt(prompt)
+        print(response)
 
