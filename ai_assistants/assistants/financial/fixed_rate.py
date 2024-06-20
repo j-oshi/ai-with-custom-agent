@@ -1,5 +1,5 @@
-from enum import Enum
 import json
+from enum import Enum
 
 class Period(Enum):
     MONTH = ('month', 12)

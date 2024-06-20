@@ -1,5 +1,22 @@
 import os
 import ast
+import importlib.util
+
+def import_module_from_file(file_path):
+    """
+    Dynamically import a module from a given file path.
+
+    Args:
+        file_path (str): Path to the Python file.
+
+    Returns:
+        module: The imported module.
+    """
+    module_name = os.path.splitext(os.path.basename(file_path))[0]
+    spec = importlib.util.spec_from_file_location(module_name, file_path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 def register_function(file_path):
     """

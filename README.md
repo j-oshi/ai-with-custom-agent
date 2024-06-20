@@ -1,7 +1,15 @@
 # ai-with-custom-agent
 Ai with custom agent to solve local task.
 
-# Running the Tests
+## Install ollama
+Install and pull down model
+
+## Run query 
+Start by ```bash
+py agents/agent.py
+```
+
+## Running the Tests
 To run the tests, navigate to the root of your project in the terminal and run:
 ```bash
 py -m unittest discover -s tests
