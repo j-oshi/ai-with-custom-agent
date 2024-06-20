@@ -129,6 +129,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+awca_env
 
 awca_env
 
