@@ -10,8 +10,10 @@ if parent_dir not in sys.path:
 
 from prompts.modify_prompt import system_prompt_template
 from model_api import ollama_model_api, openai_model_api
-from ai_assistants.assistants_registry import get_functions_list
-from ai_assistants.assistants.financial.fixed_rate import fixed_rate_prompt
+from registry.ai_assistants_registry import registry as registered_ai_assistants
+
+# from ai_assistants.assistants_registry import get_functions_list
+# from ai_assistants.assistants.financial.fixed_rate import fixed_rate_prompt
 
 # Define supported model APIs (assuming these are defined elsewhere)
 SUPPORTED_MODEL_APIS = {
@@ -21,17 +23,15 @@ SUPPORTED_MODEL_APIS = {
 
 
 class Agent:
-    def __init__(self, model_api_key, model_name, tools, assistant_folder_path, excluded_files):
+    def __init__(self, model_api_key, model_name, ai_assistants):
         self.model_api = SUPPORTED_MODEL_APIS.get(model_api_key)
         if not self.model_api:
             raise ValueError(f"Unsupported model API: {model_api_key}")
         self.model_name = model_name
-        self.tools = tools
-        self.assistant_folder_path = assistant_folder_path
-        self.excluded_files = excluded_files
+        self.ai_assistants = ai_assistants
 
     def execute_prompt(self, prompt):
-        ai_assistants = get_functions_list(self.assistant_folder_path, self.excluded_files)
+        ai_assistants = self.ai_assistants.list_functions()
         agent_system_prompt = system_prompt_template.format(tool_descriptions=ai_assistants)
 
         model_instance = self.model_api(
@@ -54,27 +54,24 @@ class Agent:
             return self.execute_function(func_name, func_input_str)
 
     def execute_function(self, func_name, input_str):
+        return self.ai_assistants.execute_function(func_name, input_str)
         # Use import_module for dynamic tool loading
-        for tool in self.tools:
-            if tool.__name__ == func_name:
-                return tool(input_str)
-        # Raise an error if no matching tool is found
-        raise ValueError(f"Function not found: {func_name}")
+        # for tool in self.tools:
+        #     if tool.__name__ == func_name:
+        #         return tool(input_str)
+        # # Raise an error if no matching tool is found
+        # raise ValueError(f"Function not found: {func_name}")
 
 
 if __name__ == "__main__":
     model_api_key = "ollama_model_api"  # Assuming this is the chosen API
     model_name = "mistral:latest"
-    tools = [fixed_rate_prompt]
-    assistant_folder_path = "ai_assistants/assistants"  # Assuming this path is correct
-    excluded_files = ["__init__.py"]
+    ai_assistants = registered_ai_assistants
 
     agent = Agent(
         model_api_key=model_api_key,
         model_name=model_name,
-        tools=tools,
-        assistant_folder_path=assistant_folder_path,
-        excluded_files=excluded_files,
+        ai_assistants=ai_assistants,
     )
     # response = agent.execute_prompt('What is capital of the united states?')
     # response = agent.execute_prompt(
