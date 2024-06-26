@@ -24,7 +24,7 @@ def fixed_rate(principal: float = 0, period: float = 0, interestRate: float = 0,
             - 'interestRate': Interest rate per period.
             - 'periodPayment': Monthly or annual payment amount.
             - 'totalCostOfMortgage': Total cost of the mortgage.
-            - 'period': Type of payment period (monthly or annually).
+            - 'periodType': Type of payment period (monthly or annually).
     """
     if principal > 0 and period > 0 and interestRate > 0:
         periodInterestRate = interestRate / (100 * periodType.tointeger)
@@ -34,9 +34,10 @@ def fixed_rate(principal: float = 0, period: float = 0, interestRate: float = 0,
             'interestRate': periodInterestRate,
             'periodPayment': periodPayment,
             'totalCostOfMortgage': totalCostOfMortgage,
-            'period': periodType.tostring
+            'periodType': periodType.tostring,
+            'period': period
         }
-    return {'interestRate': 0, 'periodPayment': 0, 'totalCostOfMortgage': 0, 'period': periodType.tostring}
+    return {'interestRate': 0, 'periodPayment': 0, 'totalCostOfMortgage': 0, 'periodType': periodType.tostring, "period": period}
 
 def fixed_rate_prompt(input_str):
     """
@@ -51,6 +52,12 @@ def fixed_rate_prompt(input_str):
         Example: '{"principal": 5000, "period": 3, "interestRate": 2.5}' or "{'principal': 6000, 'period': 4.2, 'interestRate': 3.4, 'periodType': 'year'}"
 
     Returns:
+    fixed_rate_resul (dictionary): A JSOn result of the operation containing:
+        - "interestRate": The interest rate is the periodic rate that is monthly if the period type is month, otherwise it is annually.
+        - "periodType": Period type value in string form. It is either month or year.
+        - "period": Duration of loan payment. Monthly if periodType is month otherwise annually.
+        - "periodPayment": The periodic payment on loan amount based on period type. If period type is month, it is a monthly payment otherwise annual payment.
+        - "totalCostOfMortgage": Total amount paid to payoff loan. It is based on periodPayment and period.
     str: The formatted result of the operation.
     """
     try:
@@ -68,6 +75,38 @@ def fixed_rate_prompt(input_str):
         return fixed_rate_result
     except (json.JSONDecodeError, KeyError) as e:
         return {"error": str(e), "message": "Invalid input format. Please provide a valid JSON string."}
+    
+def fixed_rate_string_formated_prompt(input_str):
+    """
+    Format the result of fixed_rate_prompt to sentence string.
 
-__all__ = ['fixed_rate_prompt']
+    Parameters:
+    input_str (str): A JSON string containing the following keys:
+        - "interestRate": The interest rate is the periodic rate that is monthly if the period type is month, otherwise it is annually.
+        - "periodType": Period type value in string form. It is either month or year.
+        - "period": Duration of loan payment. Monthly if periodType is month otherwise annually.
+        - "periodPayment": The periodic payment on loan amount based on period type. If period type is month, it is a monthly payment otherwise annual payment.
+        - "totalCostOfMortgage": Total amount paid to payoff loan. It is based on periodPayment and period.
+        Example: '{""interestRate": 5000, "period": "month", "interestRate": 2.5, "totalCostOfMortgage"":  5600}' or "{'principal': 6000, 'period': 4.2, 'interestRate': 3.4, 'periodType': 'year'}"
+
+    Returns:
+    str: The formatted result of the operation.
+    """
+
+    try:
+        input_str_clean = input_str.replace("'", "\"").strip().strip("\"")
+        input_dict = json.loads(input_str_clean)
+        totalCostOfMortgage = input_dict.get("totalCostOfMortgage", 0)
+        period = input_dict.get("period", 0)
+        interest_rate = input_dict.get("interestRate", 0)
+        period_type_str = input_dict.get("periodType", "month").lower()
+        periodPayment = input_dict.get("periodPayment", 0)
+        
+        period_type = Period.MONTH if period_type_str == "month" else Period.YEAR
+
+        return f'The total cost is {totalCostOfMortgage} paid {period_type}ly for a {period_type}ly period of {period}. {periodPayment} is paid {period_type}ly at {interest_rate}% {period_type}ly.'
+    except (json.JSONDecodeError, KeyError) as e:
+        return {"error": str(e), "message": "Invalid input format. Please provide a valid JSON string."}
+
+__all__ = ['fixed_rate_prompt', "fixed_rate_string_formated_prompt"]
 
