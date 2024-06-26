@@ -4,6 +4,9 @@ Ai with custom agent to solve local task.
 ## Install ollama
 Install and pull down model
 
+## Api keys
+Create .env file at root level and add api key for model.
+
 ## Run query 
 Start by 
 ```bash

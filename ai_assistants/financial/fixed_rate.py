@@ -52,13 +52,12 @@ def fixed_rate_prompt(input_str):
         Example: '{"principal": 5000, "period": 3, "interestRate": 2.5}' or "{'principal': 6000, 'period': 4.2, 'interestRate': 3.4, 'periodType': 'year'}"
 
     Returns:
-    fixed_rate_resul (dictionary): A JSOn result of the operation containing:
+    fixed_rate_result (dictionary): A JSON result of the operation containing:
         - "interestRate": The interest rate is the periodic rate that is monthly if the period type is month, otherwise it is annually.
         - "periodType": Period type value in string form. It is either month or year.
         - "period": Duration of loan payment. Monthly if periodType is month otherwise annually.
         - "periodPayment": The periodic payment on loan amount based on period type. If period type is month, it is a monthly payment otherwise annual payment.
         - "totalCostOfMortgage": Total amount paid to payoff loan. It is based on periodPayment and period.
-    str: The formatted result of the operation.
     """
     try:
         input_str_clean = input_str.replace("'", "\"").strip().strip("\"")
@@ -78,7 +77,7 @@ def fixed_rate_prompt(input_str):
     
 def fixed_rate_string_formated_prompt(input_str):
     """
-    Format the result of fixed_rate_prompt to sentence string.
+    Format the JSON string result of fixed_rate_prompt to sentence string.
 
     Parameters:
     input_str (str): A JSON string containing the following keys:
