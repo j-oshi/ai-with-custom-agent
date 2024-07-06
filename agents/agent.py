@@ -4,13 +4,13 @@ import json
 from importlib import import_module
 
 # Set directory paths
-parent_dir = os.path.abspath('..')
+parent_dir = os.path.abspath('.')
 if parent_dir not in sys.path:
     sys.path.append(parent_dir)
 
 from prompts.modify_prompt import system_prompt_template
 from model_api import ollama_model_api, openai_model_api
-from registry.ai_assistants_registry import registry as registered_ai_assistants
+from registry.register_tools import create_registry as registered_ai_assistants
 
 # Define supported model APIs (assuming these are defined elsewhere)
 SUPPORTED_MODEL_APIS = {
@@ -31,23 +31,30 @@ class Agent:
         agent_system_prompt = system_prompt_template.format(tool_descriptions=ai_assistants)
 
         model_instance = self.model_api(
-            model=self.model_name, prompt_modification=agent_system_prompt
+            model=self.model_name, 
+            prompt_modification=agent_system_prompt
         )
 
-        agent_response_str = model_instance.chat(prompt)
+        agent_response_str = model_instance.run_query(prompt)
 
         try:
             agent_response_dict = json.loads(agent_response_str)
         except json.JSONDecodeError as e:
             raise ValueError(f"Error parsing JSON response: {e}")
 
-        func_name = agent_response_dict['tool_choice']
-        func_input_str = agent_response_dict['tool_input']
+        func_name = agent_response_dict.get('tool_choice')
+        func_input_str = agent_response_dict.get('tool_input')
+        
+        # If 'tool_choice' or 'tool_input' do not exist, return the response
+        if func_name and func_input_str:
+            return self.execute_function(func_name, func_input_str)
 
+        # If 'tool_choice' is "no tool", return 'tool_input'
         if func_name == "no tool":
             return func_input_str
         else:
-            return self.execute_function(func_name, func_input_str)
+            return agent_response_dict
+            
 
     def execute_function(self, func_name, input_str):
         try:
@@ -58,7 +65,7 @@ class Agent:
 if __name__ == "__main__":
     model_api_key = "ollama_model_api"
     model_name = "mistral:latest"
-    ai_assistants = registered_ai_assistants
+    ai_assistants = registered_ai_assistants()
 
     agent = Agent(
         model_api_key=model_api_key,
