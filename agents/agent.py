@@ -36,7 +36,7 @@ class Agent:
         )
 
         agent_response_str = model_instance.run_query(prompt)
-
+        print(agent_response_str)
         try:
             agent_response_dict = json.loads(agent_response_str)
         except json.JSONDecodeError as e:
@@ -47,12 +47,16 @@ class Agent:
         
         # If 'tool_choice' or 'tool_input' do not exist, return the response
         if func_name and func_input_str:
+            print(f'{func_name} is used.')
+            print('prince michael jackson')
             return self.execute_function(func_name, func_input_str)
 
         # If 'tool_choice' is "no tool", return 'tool_input'
         if func_name == "no tool":
+            print('no tools')
             return func_input_str
         else:
+            print('only prompt')
             return agent_response_dict
             
 

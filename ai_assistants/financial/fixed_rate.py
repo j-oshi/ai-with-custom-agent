@@ -17,15 +17,16 @@ def fixed_rate(principal: float = 0, period: float = 0, interestRate: float = 0,
         principal (float): Loan amount.
         period (float): Duration to pay back principal, expressed in months or years.
         interestRate (float): Interest rate on principal.
-        periodType (Period): Specify type of period (monthly or annually). Default is monthly.
+        periodType (Period): Specify type of period (month or year). Default is month.
 
     Returns:
         dict: A dictionary containing:
             - 'interestRate': Interest rate per period.
             - 'periodPayment': Monthly or annual payment amount.
             - 'totalCostOfMortgage': Total cost of the mortgage.
-            - 'periodType': Type of payment period (monthly or annually).
+            - 'periodType': Type of payment period (month or year).
     """
+
     if principal > 0 and period > 0 and interestRate > 0:
         periodInterestRate = interestRate / (100 * periodType.tointeger)
         periodPayment = (principal * (periodInterestRate * ((1 + periodInterestRate) ** period))) / (((1 + periodInterestRate) ** period) - 1)
@@ -45,19 +46,19 @@ def fixed_rate_prompt(input_str):
 
     Parameters:
     input_str (str): A JSON string containing the following keys:
-        - "principal": The principal amount (initial investment).
-        - "period": The time period in years.
-        - "interestRate": The annual interest rate (in percentage).
+        - "principal": The principal amount.
+        - "period": The time period ('month' or 'year').
+        - "interestRate": The interest rate  ('month' or 'year').
         - "periodType": The type of period ('month' or 'year'). Optional, defaults to 'month'.
         Example: '{"principal": 5000, "period": 3, "interestRate": 2.5}' or "{'principal': 6000, 'period': 4.2, 'interestRate': 3.4, 'periodType': 'year'}"
 
     Returns:
     fixed_rate_result (dictionary): A JSON result of the operation containing:
-        - "interestRate": The interest rate is the periodic rate that is monthly if the period type is month, otherwise it is annually.
+        - "interestRate": The interest rate is the periodic rate.
         - "periodType": Period type value in string form. It is either month or year.
-        - "period": Duration of loan payment. Monthly if periodType is month otherwise annually.
-        - "periodPayment": The periodic payment on loan amount based on period type. If period type is month, it is a monthly payment otherwise annual payment.
-        - "totalCostOfMortgage": Total amount paid to payoff loan. It is based on periodPayment and period.
+        - "period": Duration of loan payment.
+        - "periodPayment": The periodic payment on loan amount based on period type.
+        - "totalCostOfMortgage": Total amount paid to payoff loan.
     """
     try:
         input_str_clean = input_str.replace("'", "\"").strip().strip("\"")
@@ -81,11 +82,11 @@ def fixed_rate_string_formated_prompt(input_str):
 
     Parameters:
     input_str (str): A JSON string containing the following keys:
-        - "interestRate": The interest rate is the periodic rate that is monthly if the period type is month, otherwise it is annually.
+        - "interestRate": The interest rate is the periodic rate.
         - "periodType": Period type value in string form. It is either month or year.
-        - "period": Duration of loan payment. Monthly if periodType is month otherwise annually.
-        - "periodPayment": The periodic payment on loan amount based on period type. If period type is month, it is a monthly payment otherwise annual payment.
-        - "totalCostOfMortgage": Total amount paid to payoff loan. It is based on periodPayment and period.
+        - "period": Duration of loan payment.
+        - "periodPayment": The periodic payment on loan amount based on period type.
+        - "totalCostOfMortgage": Total amount paid to payoff loan.
         Example: '{""interestRate": 5000, "period": "month", "interestRate": 2.5, "totalCostOfMortgage"":  5600}' or "{'principal': 6000, 'period': 4.2, 'interestRate': 3.4, 'periodType': 'year'}"
 
     Returns:

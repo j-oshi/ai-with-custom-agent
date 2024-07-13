@@ -20,7 +20,7 @@ class AiAssistantsRegistry:
         self.registry[name] = {
             "name": name,
             "docstring": docstring,
-            "function": node,
+            "func": node,
         }
     
     def list_functions(self):
@@ -30,7 +30,8 @@ class AiAssistantsRegistry:
       Returns:
         List[dict]: List of dictionaries containing 'func_name' and 'docstring'.
       """
-      return [{'func_name': name, 'docstring': info['docstring']} for name, info in self.registry.items()]
+
+      return [{'func_name': name, 'docstring': info['docstring'], 'func': info['func']} for name, info in self.registry.items()]
 
     def select_function(self, name):
         """
