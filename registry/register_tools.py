@@ -2,7 +2,9 @@ import ast
 import os
 import sys
 
-parent_dir = os.path.abspath(".")
+current_directory = os.getcwd()
+parent_directory = os.path.dirname(current_directory)
+parent_dir = os.path.join(parent_directory, "registry")
 if parent_dir not in sys.path:
     sys.path.append(parent_dir)
 
@@ -79,8 +81,7 @@ def get_functions_list(registry, assistant_folder_path, excluded_files=[]):
 def create_registry():
     # Create an instance of the registry
     registry = AiAssistantsRegistry()
-
-    folder_path = os.path.join(parent_dir, "ai_assistants")
+    folder_path = os.path.join(parent_directory, "ai_assistants")
     get_functions_list(registry, folder_path)
 
     return registry
