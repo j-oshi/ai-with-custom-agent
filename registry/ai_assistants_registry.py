@@ -8,7 +8,7 @@ class AiAssistantsRegistry:
 
     def register(self, name, docstring, node):
         """
-        Registers a function by storing its name, docstring, and reference.
+        Registers a function by storing its name, docstring and function.
 
         Args:
             func: The function to be registered.
@@ -28,7 +28,7 @@ class AiAssistantsRegistry:
       Get a list of registered functions and their docstrings.
 
       Returns:
-        List[dict]: List of dictionaries containing 'func_name' and 'docstring'.
+        List[dict]: List of dictionaries containing 'func_name', 'docstring' and 'func'.
       """
 
       return [{'func_name': name, 'docstring': info['docstring'], 'func': info['func']} for name, info in self.registry.items()]
@@ -44,7 +44,7 @@ class AiAssistantsRegistry:
             The registered function object or None if not found.
         """
         if name in self.registry:
-            return self.registry[name]["function"]
+            return self.registry[name]["func"]
         else:
             return None
 
@@ -61,6 +61,8 @@ class AiAssistantsRegistry:
             The return value of the executed function (if any).
         """
         func = self.select_function(name)
+        print('This is the func')
+        print(func)
         if func:
             return func(*args, **kwargs)
         else:

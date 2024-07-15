@@ -22,24 +22,37 @@ py -m unittest discover -s tests
 ## Folder structure
 ```
 ai_with_custom_agent
+├─ .gitignore
+├─ agents
+│  └─ agent.py
 ├─ ai_assistants
-│  ├─ assistanta.py
-│  └─ assistants
-│     └─ financial
-│        └─ fixed_rate.py
+│  ├─ financial
+│  │  ├─ fixed_rate.py
+│  │  └─ __init__.py
+│  └─ __init__.py
 ├─ config.yaml
 ├─ model_api
 │  ├─ base_model_api.py
 │  ├─ ollama_model_api.py
 │  ├─ openai_model_api.py
 │  └─ __init__.py
-├─ Notebooks
+├─ notebooks
 │  └─ ai-functions-analysis.ipynb
+├─ prompts
+│  ├─ modify_prompt.py
+│  └─ __init__.py
 ├─ README.md
+├─ registry
+│  ├─ ai_assistants_registry.py
+│  ├─ register_tools.py
+│  └─ __init__.py
 ├─ requirements.txt
 ├─ tests
+│  ├─ test_fixed_rate.py
 │  └─ test_ollama_api.py
 └─ utils
    ├─ config.py
    ├─ helpers.py
    └─ __init__.py
+
+```

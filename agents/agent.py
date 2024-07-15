@@ -4,13 +4,16 @@ import json
 from importlib import import_module
 
 # Set directory paths
-parent_dir = os.path.abspath('.')
-if parent_dir not in sys.path:
-    sys.path.append(parent_dir)
+current_file_path = os.path.abspath(__file__)
+current_directory = os.path.dirname(current_file_path)
+parent_directory = os.path.dirname(current_directory)
+if parent_directory not in sys.path:
+    sys.path.append(parent_directory)
 
 from prompts.modify_prompt import system_prompt_template
 from model_api import ollama_model_api, openai_model_api
 from registry.register_tools import create_registry as registered_ai_assistants
+
 
 # Define supported model APIs (assuming these are defined elsewhere)
 SUPPORTED_MODEL_APIS = {
@@ -29,14 +32,13 @@ class Agent:
     def execute_prompt(self, prompt):
         ai_assistants = self.ai_assistants.list_functions()
         agent_system_prompt = system_prompt_template.format(tool_descriptions=ai_assistants)
-
         model_instance = self.model_api(
             model=self.model_name, 
             prompt_modification=agent_system_prompt
         )
 
         agent_response_str = model_instance.run_query(prompt)
-        print(agent_response_str)
+
         try:
             agent_response_dict = json.loads(agent_response_str)
         except json.JSONDecodeError as e:

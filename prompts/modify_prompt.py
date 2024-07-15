@@ -59,7 +59,7 @@
 system_prompt_template = """
 As an agent, you have a set of useful functions at your disposal. Each function’s usage is detailed in its docstring. When presented with a user query, your task is to decide if the question needs to be broken down into smaller parts. For each part of the question, you need to determine which function, if any, is best suited to provide an answer.
 
-Here is a list of your tools along with their descriptions: {tool_descriptions}
+Here is a list of local functions tools along with their descriptions: {tool_descriptions}
 
 You will create a JSON response with the following structure:
 
@@ -81,6 +81,7 @@ Decomposed Questions: If applicable the original user query is decomposed and li
 Subquestions:
     - Question: This is the decomposed question or Original User Query (if there is no need to decomposed) that you need to answer. 
     - Thought: Consider what to do next based on the decomposed question. This could involve deciding whether a tool is needed and which one to use. Also determine which results to utilize.
+    - Tools: Is tool used and which tool is used on decomposed question.
     - Action: This is the action to take, which is based on thought.
     - Action Input: Define the specific input needed for the chosen action, derived from the thought.
     - Observation: This is the result of calling the corresponding tool_function of action and passing the input from action input to tool_function. There is the choice of using tool or doing it manually. It provides insight into the answer for the decomposed question.
