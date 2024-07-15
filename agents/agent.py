@@ -49,8 +49,9 @@ class Agent:
         
         # If 'tool_choice' or 'tool_input' do not exist, return the response
         if func_name and func_input_str:
-            print(f'{func_name} is used.')
-            print('prince michael jackson')
+            print('tools')
+            print(func_name)
+            print(func_input_str)
             return self.execute_function(func_name, func_input_str)
 
         # If 'tool_choice' is "no tool", return 'tool_input'
