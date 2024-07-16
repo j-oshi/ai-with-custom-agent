@@ -10,7 +10,7 @@ class OllamaAPI(BaseModelAPI):
         self.headers = {"Content-Type": "application/json"}
         self.temperature = temperature
 
-    def run_query(self, prompt):
+    def generate(self, prompt):
         payload = {
             "model": self.model,
             "format": "json",

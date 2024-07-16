@@ -5,7 +5,10 @@ import os
 from .base_model_api import BaseModelAPI
 from utils.config import load_config
 
-config_path = os.path.join(os.path.dirname(__file__), '..', 'config.yaml')
+current_file_path = os.path.abspath(__file__)
+current_directory = os.path.dirname(current_file_path)
+
+config_path = os.path.join(os.path.dirname(current_directory), '..', 'config.yaml')
 
 load_config(config_path)
 

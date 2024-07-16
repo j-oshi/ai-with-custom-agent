@@ -61,8 +61,6 @@ class AiAssistantsRegistry:
             The return value of the executed function (if any).
         """
         func = self.select_function(name)
-        print('This is the func')
-        print(func)
         if func:
             return func(*args, **kwargs)
         else:
