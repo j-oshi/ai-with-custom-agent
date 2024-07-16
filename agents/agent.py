@@ -1,7 +1,6 @@
 import os
 import sys
 import json
-from importlib import import_module
 
 # Set directory paths
 current_file_path = os.path.abspath(__file__)
@@ -10,8 +9,8 @@ parent_directory = os.path.dirname(current_directory)
 if parent_directory not in sys.path:
     sys.path.append(parent_directory)
 
-from prompts.modify_prompt import system_prompt_template
-from model_api import ollama_model_api, openai_model_api
+from model.standard import ollama_model_api, openai_model_api
+from prompts.modify_prompt import system_prompt_template 
 from registry.register_tools import create_registry as registered_ai_assistants
 
 
@@ -37,7 +36,7 @@ class Agent:
             prompt_modification=agent_system_prompt
         )
 
-        agent_response_str = model_instance.run_query(prompt)
+        agent_response_str = model_instance.generate(prompt)
 
         try:
             agent_response_dict = json.loads(agent_response_str)
@@ -49,17 +48,12 @@ class Agent:
         
         # If 'tool_choice' or 'tool_input' do not exist, return the response
         if func_name and func_input_str:
-            print('tools')
-            print(func_name)
-            print(func_input_str)
             return self.execute_function(func_name, func_input_str)
 
         # If 'tool_choice' is "no tool", return 'tool_input'
         if func_name == "no tool":
-            print('no tools')
             return func_input_str
         else:
-            print('only prompt')
             return agent_response_dict
             
 

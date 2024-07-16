@@ -9,7 +9,7 @@ parent_dir = os.path.abspath('..')
 if parent_dir not in sys.path:
     sys.path.append(parent_dir)
 
-from model_api.ollama_model_api import OllamaAPI
+from model.standard.ollama_model_api import OllamaAPI
 
 class TestOllamaAPI(unittest.TestCase):
     def setUp(self):
