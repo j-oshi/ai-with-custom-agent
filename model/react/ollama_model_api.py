@@ -33,8 +33,6 @@ class OllamaAPI(BaseModelAPI):
         try:
             response = requests.post(self.model_endpoint, headers=self.headers, data=json.dumps(payload))
             response_dict = response.json()
-            print('this is the response')
-            print(response_dict)
             return response_dict['message']['content']
         except requests.RequestException as e:
             return {"error": f"Error invoking the model: {str(e)}"}
