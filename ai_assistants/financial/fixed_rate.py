@@ -114,7 +114,7 @@ def fixed_rate_string_formated_prompt(input_data):
         period_type_str = input_dict.get("periodType", "month").lower()
         periodPayment = input_dict.get("periodPayment", 0)
         
-        period_type = Period.MONTH if period_type_str == "month" else Period.YEAR
+        period_type = Period.MONTH.tostring if period_type_str == "month" else Period.YEAR.tostring
 
         return f'The total cost is {totalCostOfMortgage} paid {period_type}ly for a {period_type}ly period of {period}. {periodPayment} is paid {period_type}ly at {interest_rate}% {period_type}ly.'
     except (json.JSONDecodeError, KeyError) as e:

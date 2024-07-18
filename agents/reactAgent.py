@@ -47,6 +47,9 @@ class Agent:
         if func_name and func_input_str:
             return self.execute_function(func_name, func_input_str)
         elif func_name == "no tool":
+            print('No tool response')
+            print(agent_response_dict)
+            print('End of no tool response')
             return func_input_str
         else:
             return agent_response_dict
@@ -122,4 +125,4 @@ if __name__ == "__main__":
 
 print('Program terminated.')
 
-# How much will be paid monthly on a loan of £10000 for 5 years at a rate of 2.5% yearly. What is the total amount paid after 5 years?
+# How much will be paid monthly on a loan of £10000 for 5 years at a interest rate of 2.5% per year. What is the total amount paid after 5 years?
