@@ -40,17 +40,17 @@ def fixed_rate(principal: float = 0, period: float = 0, interestRate: float = 0,
         }
     return {'interestRate': 0, 'periodPayment': 0, 'totalCostOfMortgage': 0, 'periodType': periodType.tostring, "period": period}
 
-def fixed_rate_prompt(input_str):
+def fixed_rate_prompt(input_data):
     """
     Calculate the total amount after fixed-rate interest.
 
     Parameters:
-    input_str (str): A JSON string containing the following keys:
+    input_data (str or dict): A JSON string or dictionary containing the following keys:
         - "principal": The principal amount.
         - "period": The time period ('month' or 'year').
         - "interestRate": The interest rate  ('month' or 'year').
         - "periodType": The type of period ('month' or 'year'). Optional, defaults to 'month'.
-        Example: '{"principal": 5000, "period": 3, "interestRate": 2.5}' or "{'principal': 6000, 'period': 4.2, 'interestRate': 3.4, 'periodType': 'year'}"
+        Example: '{"principal": 5000, "period": 3, "interestRate": 2.5}' or {'principal': 6000, 'period': 4.2, 'interestRate': 3.4, 'periodType': 'year'}
 
     Returns:
     fixed_rate_result (dictionary): A JSON result of the operation containing:
@@ -61,8 +61,14 @@ def fixed_rate_prompt(input_str):
         - "totalCostOfMortgage": Total amount paid to payoff loan.
     """
     try:
-        input_str_clean = input_str.replace("'", "\"").strip().strip("\"")
-        input_dict = json.loads(input_str_clean)
+        if isinstance(input_data, str):
+            input_data = input_data.replace("'", "\"").strip().strip("\"")
+            input_dict = json.loads(input_data)
+        elif isinstance(input_data, dict):
+            input_dict = input_data
+        else:
+            raise ValueError("Invalid input type. Please provide a JSON string or dictionary.")
+
         principal = input_dict.get("principal", 0)
         period = input_dict.get("period", 0)
         interest_rate = input_dict.get("interestRate", 0)
@@ -73,15 +79,15 @@ def fixed_rate_prompt(input_str):
         fixed_rate_result = fixed_rate(principal, period, interest_rate, period_type)
 
         return fixed_rate_result
-    except (json.JSONDecodeError, KeyError) as e:
-        return {"error": str(e), "message": "Invalid input format. Please provide a valid JSON string."}
+    except (json.JSONDecodeError, KeyError, ValueError) as e:
+        return {"error": str(e), "message": "Invalid input format. Please provide a valid JSON string or dictionary."}
     
-def fixed_rate_string_formated_prompt(input_str):
+def fixed_rate_string_formated_prompt(input_data):
     """
     Format the JSON string result of fixed_rate_prompt to sentence string.
 
     Parameters:
-    input_str (str): A JSON string containing the following keys:
+    input_data (str or dict): A JSON string or dictionary containing the following keys:
         - "interestRate": The interest rate is the periodic rate.
         - "periodType": Period type value in string form. It is either month or year.
         - "period": Duration of loan payment.
@@ -94,8 +100,14 @@ def fixed_rate_string_formated_prompt(input_str):
     """
 
     try:
-        input_str_clean = input_str.replace("'", "\"").strip().strip("\"")
-        input_dict = json.loads(input_str_clean)
+        if isinstance(input_data, str):
+            input_data = input_data.replace("'", "\"").strip().strip("\"")
+            input_dict = json.loads(input_data)
+        elif isinstance(input_data, dict):
+            input_dict = input_data
+        else:
+            raise ValueError("Invalid input type. Please provide a JSON string or dictionary.")
+
         totalCostOfMortgage = input_dict.get("totalCostOfMortgage", 0)
         period = input_dict.get("period", 0)
         interest_rate = input_dict.get("interestRate", 0)

@@ -131,8 +131,6 @@ env.bak/
 venv.bak/
 awca_env
 
-awca_env
-
 # Spyder project settings
 .spyderproject
 .spyproject
