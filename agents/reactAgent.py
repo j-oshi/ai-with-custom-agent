@@ -21,7 +21,6 @@ SUPPORTED_MODEL_APIS = {
     "openai_model_api": openai_model_api.OpenaiAPI,
 }
 
-
 class Agent:
     def __init__(self, model_type, model_name, system_prompt, ai_assistants):
         self.model_type = SUPPORTED_MODEL_APIS.get(model_type)
@@ -44,13 +43,10 @@ class Agent:
         func_name = agent_response_dict.get('tool_choice')
         func_input_str = agent_response_dict.get('tool_input')
 
-        if func_name and func_input_str:
+        if func_name == "no tool":
+            return agent_response_dict
+        elif func_name and func_input_str:
             return self.execute_function(func_name, func_input_str)
-        elif func_name == "no tool":
-            print('No tool response')
-            print(agent_response_dict)
-            print('End of no tool response')
-            return func_input_str
         else:
             return agent_response_dict
 
@@ -60,24 +56,23 @@ class Agent:
         except Exception as e:
             raise ValueError(f"Error executing function '{func_name}': {e}")
 
-
 prompt_template = """
-You are an agent with access to a registry of useful functions. 
-Given a user query, you will determine which functions, if any, are best suited to answer the query.
+You are an agent with access to a registry of useful functions, but some information might be unavailable or unreliable. 
+Given a user query, you will carefully assess its validity and determine which function, if any, are best suited to answer the query reliably.
 
 You will generate the following JSON response:
 
 "tool_choice": "name_of_the_tool",
 "tool_input": "inputs_to_the_tool",
 
-- `tool_choice`: The name of the tool you want to use. It must be a tool from your toolbox or "no tool" if you do not need to use a tool.
-- `tool_input`: The specific inputs required for the selected tool. If no tool, just provide a response to the query.
+- `tool_choice`: The name of the tool you want to use (or "no tool" if no tool is suitable). 
+- `tool_input`: The specific inputs required for the selected tool. If no tool, just provide a response to the query, acknowledging potential limitations.
 
 You run in a loop of Thought, Action, PAUSE, Observation.
 At the end of the loop you output an Answer.
-Use Thought to describe your thoughts about the question you have been asked.
-Use Action to decide which function, if any, is best suited to answer the query and run the functions - then return PAUSE.
-Use Observation to provide insight into the result from action.
+Use Thought to describe your initial thoughts about the question you have been asked, considering potential limitations in available information.
+Use Action to decide which function, if any, is best suited to answer the query reliably, and run the functions - then return PAUSE.
+Use Observation to provide insight into the result from action, including any limitations or potential inaccuracies.
 
 Here is a list of your tools along with their descriptions:
 {tool_descriptions}
@@ -115,7 +110,8 @@ if __name__ == "__main__":
             print("Observation:", result)
             next_prompt = f"Observation: {result}"
 
-            if 'answer' in result:  # Custom logic to check for an answer in the observation
+            # if isinstance(result, str) and 'answer' in result:
+            if 'answer' in result:
                 print("Answer:", result)
                 break
             else:
@@ -126,3 +122,4 @@ if __name__ == "__main__":
 print('Program terminated.')
 
 # How much will be paid monthly on a loan of £10000 for 5 years at a interest rate of 2.5% per year. What is the total amount paid after 5 years?
+# Considering the total cost, is it cheaper to borrow £40,000 for 5 years at an interest rate of 2.5% per year or £35,000 for 6 years at an interest rate of 2% per year?
