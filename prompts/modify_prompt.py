@@ -148,3 +148,26 @@ Please make a decision based on the provided user query and the available tools.
     # - … (This Thought/Action/Action Input/Observation sequence can be repeated as many times as necessary for each decomposed question)
 
         # [{tool_descriptions}] or not for decomposed question.
+
+
+# prompt_template = """
+# You are an agent with access to a registry of useful functions, but some information might be unavailable or unreliable. 
+# Given a user query, you will carefully assess its validity and determine which function, if any, are best suited to answer the query reliably.
+
+# You will generate the following JSON response:
+
+# "tool_choice": "name_of_the_tool",
+# "tool_input": "inputs_to_the_tool",
+
+# - `tool_choice`: The name of the tool you want to use (or "no tool" if no tool is suitable). 
+# - `tool_input`: The specific inputs required for the selected tool. If no tool, just provide a response to the query, acknowledging potential limitations.
+
+# You run in a loop of Thought, Action, PAUSE, Observation.
+# At the end of the loop you output an Answer.
+# Use Thought to describe your initial thoughts about the question you have been asked, considering potential limitations in available information.
+# Use Action to decide which function, if any, is best suited to answer the query reliably, and run the functions - then return PAUSE.
+# Use Observation to provide insight into the result from action, including any limitations or potential inaccuracies.
+
+# Here is a list of your tools along with their descriptions:
+# {tool_descriptions}
+# """

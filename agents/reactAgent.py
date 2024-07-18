@@ -56,23 +56,27 @@ class Agent:
         except Exception as e:
             raise ValueError(f"Error executing function '{func_name}': {e}")
 
+# Can put constraint by making prompt use only supplied tools
 prompt_template = """
-You are an agent with access to a registry of useful functions, but some information might be unavailable or unreliable. 
-Given a user query, you will carefully assess its validity and determine which function, if any, are best suited to answer the query reliably.
+As an agent, when presented with a user query, your task is to determine if the question needs to be broken down into smaller parts. Detail your approach to solving each part in bullet points. If some information is unavailable or unreliable, list the required information and note the limitations in bullet points.
 
-You will generate the following JSON response:
+For each question, follow this process in a loop: Thought, Action, PAUSE, Observation.
+
+- Thought: Describe your initial thoughts about the question, considering potential limitations in the available information.
+- Action: Decide which function, if any, is best suited to answer the query reliably, and execute the function. Then, return PAUSE.
+- Observation: Provide insight into the result from the action, including any limitations or potential inaccuracies.
+
+At the end of the loop, output an Answer and move to the next question.
+
+Once you have concluded all the questions, create a Final Answer, summarizing your conclusions in bullet points.
+
+You have a set of useful functions at your disposal to solve the questions. Each function's usage is detailed in its docstring. You will generate the following JSON response:
 
 "tool_choice": "name_of_the_tool",
 "tool_input": "inputs_to_the_tool",
 
-- `tool_choice`: The name of the tool you want to use (or "no tool" if no tool is suitable). 
-- `tool_input`: The specific inputs required for the selected tool. If no tool, just provide a response to the query, acknowledging potential limitations.
-
-You run in a loop of Thought, Action, PAUSE, Observation.
-At the end of the loop you output an Answer.
-Use Thought to describe your initial thoughts about the question you have been asked, considering potential limitations in available information.
-Use Action to decide which function, if any, is best suited to answer the query reliably, and run the functions - then return PAUSE.
-Use Observation to provide insight into the result from action, including any limitations or potential inaccuracies.
+- `tool_choice`: The name of the tool you want to use (or "no tool" if no tool is suitable).
+- `tool_input`: The specific inputs required for the selected tool. If no tool is needed, provide a response to the query, acknowledging potential limitations.
 
 Here is a list of your tools along with their descriptions:
 {tool_descriptions}
@@ -111,7 +115,7 @@ if __name__ == "__main__":
             next_prompt = f"Observation: {result}"
 
             # if isinstance(result, str) and 'answer' in result:
-            if 'answer' in result:
+            if 'Final Answer' in result:
                 print("Answer:", result)
                 break
             else:
