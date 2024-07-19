@@ -127,3 +127,4 @@ print('Program terminated.')
 
 # How much will be paid monthly on a loan of £10000 for 5 years at a interest rate of 2.5% per year. What is the total amount paid after 5 years?
 # Considering the total cost, is it cheaper to borrow £40,000 for 5 years at an interest rate of 2.5% per year or £35,000 for 6 years at an interest rate of 2% per year?
+# automate http://demo.oshinit.com/
