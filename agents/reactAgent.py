@@ -12,7 +12,7 @@ if parent_directory not in sys.path:
     sys.path.append(parent_directory)
 
 from prompts.modify_prompt import system_prompt_template
-from registry.register_tools import create_registry as registered_ai_assistants
+from registry.tools_loader import loader
 from model.react import ollama_model_api, openai_model_api
 
 # Define supported model APIs
@@ -22,13 +22,13 @@ SUPPORTED_MODEL_APIS = {
 }
 
 class Agent:
-    def __init__(self, model_type, model_name, system_prompt, ai_assistants):
+    def __init__(self, model_type, model_name, system_prompt, ai_tools):
         self.model_type = SUPPORTED_MODEL_APIS.get(model_type)
         if not self.model_type:
             raise ValueError(f"Unsupported model API: {model_type}")
         self.model_name = model_name
-        self.ai_assistants = ai_assistants
-        self.agent_system_prompt = system_prompt.format(tool_descriptions=self.ai_assistants.list_functions())
+        self.ai_tools = ai_tools
+        self.agent_system_prompt = system_prompt.format(tool_descriptions=self.ai_tools.list_functions())
         self.model_instance = self.model_type(model=self.model_name, system=self.agent_system_prompt)
 
     def execute_prompt(self, prompt):
@@ -52,7 +52,7 @@ class Agent:
 
     def execute_function(self, func_name, input_str):
         try:
-            return self.ai_assistants.execute_function(func_name, input_str)
+            return self.ai_tools.execute_function(func_name, input_str)
         except Exception as e:
             raise ValueError(f"Error executing function '{func_name}': {e}")
 
@@ -85,13 +85,13 @@ Here is a list of your tools along with their descriptions:
 if __name__ == "__main__":
     model_type = "ollama_model_api"
     model_name = "mistral:latest"
-    ai_assistants = registered_ai_assistants()
+    ai_tools = loader()
 
     agent = Agent(
         model_type=model_type,
         model_name=model_name,
         system_prompt=prompt_template,
-        ai_assistants=ai_assistants
+        ai_tools=ai_tools
     )
 
     while True:

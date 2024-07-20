@@ -9,7 +9,7 @@ current_directory = os.path.dirname(current_file_path)
 if current_directory not in sys.path:
     sys.path.append(current_directory)
 
-from .ai_assistants_registry import AiAssistantsRegistry
+from .tools_registry import ToolsRegistry
 
 def register_function(registry, file_path):
     """
@@ -79,9 +79,9 @@ def get_functions_list(registry, assistant_folder_path, excluded_files=[]):
                 register_function(registry, file_path)
 
 
-def create_registry():
+def loader():
     # Create an instance of the registry
-    registry = AiAssistantsRegistry()
+    registry = ToolsRegistry()
 
     # Get the parent directory
     parent_directory = os.path.dirname(current_directory)

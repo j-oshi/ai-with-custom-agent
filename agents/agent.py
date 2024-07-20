@@ -11,8 +11,7 @@ if parent_directory not in sys.path:
 
 from model.standard import ollama_model_api, openai_model_api
 from prompts.modify_prompt import system_prompt_template 
-from registry.register_tools import create_registry as registered_ai_assistants
-
+from registry.tools_loader import loader
 
 # Define supported model APIs (assuming these are defined elsewhere)
 SUPPORTED_MODEL_APIS = {
@@ -21,16 +20,16 @@ SUPPORTED_MODEL_APIS = {
 }
 
 class Agent:
-    def __init__(self, model_api_key, model_name, ai_assistants):
+    def __init__(self, model_api_key, model_name, ai_tools):
         self.model_api = SUPPORTED_MODEL_APIS.get(model_api_key)
         if not self.model_api:
             raise ValueError(f"Unsupported model API: {model_api_key}")
         self.model_name = model_name
-        self.ai_assistants = ai_assistants
+        self.ai_tools = ai_tools
 
     def execute_prompt(self, prompt):
-        ai_assistants = self.ai_assistants.list_functions()
-        agent_system_prompt = system_prompt_template.format(tool_descriptions=ai_assistants)
+        ai_tools = self.ai_tools.list_functions()
+        agent_system_prompt = system_prompt_template.format(tool_descriptions=ai_tools)
         model_instance = self.model_api(
             model=self.model_name, 
             prompt_modification=agent_system_prompt
@@ -59,19 +58,19 @@ class Agent:
 
     def execute_function(self, func_name, input_str):
         try:
-            return self.ai_assistants.execute_function(func_name, input_str)
+            return self.ai_tools.execute_function(func_name, input_str)
         except Exception as e:
             raise ValueError(f"Error executing function '{func_name}': {e}")
 
 if __name__ == "__main__":
     model_api_key = "ollama_model_api"
     model_name = "mistral:latest"
-    ai_assistants = registered_ai_assistants()
+    ai_tools = loader()
 
     agent = Agent(
         model_api_key=model_api_key,
         model_name=model_name,
-        ai_assistants=ai_assistants,
+        ai_tools=ai_tools,
     )
 
     while True:

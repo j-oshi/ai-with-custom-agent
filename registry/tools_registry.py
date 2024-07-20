@@ -1,4 +1,4 @@
-class AiAssistantsRegistry:
+class ToolsRegistry:
     """
     A class to register functions, store details, and provide selection/execution.
     """

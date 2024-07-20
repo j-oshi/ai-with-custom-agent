@@ -5,7 +5,8 @@ import sys
 parent_dir = os.path.abspath('..')
 if parent_dir not in sys.path:
     sys.path.append(parent_dir)
-from ai_assistants.assistants.financial.fixed_rate import fixed_rate_prompt
+
+from tools.financial.fixed_rate import fixed_rate_prompt
 
 class TestFixedRatePrompt(unittest.TestCase):
 
