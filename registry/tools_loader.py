@@ -87,7 +87,7 @@ def loader():
     parent_directory = os.path.dirname(current_directory)
 
     # Set the folder_path relative to the parent_directory
-    folder_path = os.path.join(parent_directory, "ai_assistants")
+    folder_path = os.path.join(parent_directory, "tools")
     get_functions_list(registry, folder_path)
 
     return registry

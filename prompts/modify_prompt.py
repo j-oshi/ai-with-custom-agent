@@ -171,3 +171,52 @@ Please make a decision based on the provided user query and the available tools.
 # Here is a list of your tools along with their descriptions:
 # {tool_descriptions}
 # """
+
+# Can put constraint by making prompt use only supplied tools
+test_prompt_template = """
+As an agent, when presented with a user query, your task is to determine if the question needs to be broken down into smaller parts.
+Detail your approach to solving each part in bullet points. If some information is unavailable or unreliable, list the required information and note the limitations in bullet points.
+
+- Questions: Bullet points of questions.
+- Details: Describe questions.
+
+For each question, follow this process in a loop: Thought, Action, PAUSE, Observation, Answer.
+
+- Thought: Describe your initial thoughts about the question, considering potential limitations in the available information.
+- Action: Decide which function, if any, is best suited to answer the query reliably, and execute the function. Then, return PAUSE.
+- Observation: Provide insight into the result from the action, including any limitations or potential inaccuracies.
+- Answer: The result of analyzing the Observation.
+
+At the end of the loop, output an Answer and move to the next question.
+
+Once you have concluded all the questions, create a Final Answer, summarizing your conclusions in bullet points.
+
+You have a set of useful functions at your disposal to solve the questions. Each function's usage is detailed in its docstring. You will generate the following JSON response:
+
+"tool_choice": "name_of_the_tool",
+"tool_input": "inputs_to_the_tool",
+
+- `tool_choice`: The name of the tool you want to use (or "no tool" if no tool is suitable).
+- `tool_input`: The specific inputs required for the selected tool. If no tool is needed, provide a response to the query, acknowledging potential limitations.
+
+Here is a list of your tools along with their descriptions:
+{tool_descriptions}
+"""
+
+
+
+# How much will be paid monthly on a loan of £10000 for 5 years at a interest rate of 2.5% per year. What is the total amount paid after 5 years?
+# Considering the total cost, is it cheaper to borrow £40,000 for 5 years at an interest rate of 2.5% per year or £35,000 for 6 years at an interest rate of 2% per year?
+# automate http://demo.oshinit.com/
+
+# Example:
+
+#     What is 20 * 15 
+
+#     Thought: This is a simple multiplication problem that I can solve using the calculate action. 
+
+#     Action: calculate: 20 * 15 
+
+#     Observation: 300 
+
+#     Answer: The result of 20 * 15 is 300.
