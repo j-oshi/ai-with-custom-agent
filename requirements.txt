@@ -1,3 +1,4 @@
 jupyterlab
 selenium
 webdriver-manager
+fake_useragent
