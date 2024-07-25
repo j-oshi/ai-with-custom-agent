@@ -3,8 +3,6 @@ from bs4 import BeautifulSoup
 from fake_useragent import UserAgent
 import time
 
-
-
 def check_website_connectivity(input_str):
     """
     Check if a website can be connected to.
@@ -23,7 +21,7 @@ def check_website_connectivity(input_str):
         response = requests.head(url, timeout=5)
         return response.status_code == 200
     except requests.RequestException:
-        return False
+        return response.status_code
 
 
 def get_website_content(input_str):

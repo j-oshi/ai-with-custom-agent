@@ -35,7 +35,7 @@ if __name__ == "__main__":
             next_prompt = f"Observation: {result}"
 
             # if isinstance(result, str) and 'answer' in result:
-            if 'Final Answer' in result:
+            if isinstance(result, dict) and 'Final Answer' in result:
                 print("Answer:", result)
                 break
             else:
