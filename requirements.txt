@@ -2,3 +2,4 @@ jupyterlab
 selenium
 webdriver-manager
 fake_useragent
+beautifulsoup4
