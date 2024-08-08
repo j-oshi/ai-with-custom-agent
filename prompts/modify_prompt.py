@@ -220,3 +220,586 @@ Here is a list of your tools along with their descriptions:
 #     Observation: 300 
 
 #     Answer: The result of 20 * 15 is 300.
+
+
+# Output Format:
+# {
+#   "startup_invest": {
+#     "loan_amount": 50000,
+#     "interest_rate": 9.8,
+#     "loan_duration_years": 2,
+#     "equipment_cost": 10000,
+#     "food_mixer_cost": 10000,
+#     "dough_moulder_cost": 8000
+#   },
+#   "fixed_costs": {
+#     "rent": 2500,
+#     "electricity": 400,
+#     "worker_wages": 4500,
+#     "supervisor_wage": 2250
+#   },
+#   "variable_costs": {
+#     "flour_bags": 20,
+#     "flour_cost_per_bag": 20,
+#     "salt_bags": 5,
+#     "salt_cost_per_bag": 2.0,
+#     "yeast_bags": 5,
+#     "yeast_cost_per_bag": 15
+#   },
+#   "revenue": {
+#     "loaves_per_day": 600,
+#     "price_per_loaf": 1.89,
+#     "projected_sales_volume_per_month": 18000,
+#     "subscription_revenue_per_month": 500,
+#     "discounts": 50
+#   }
+# }
+
+
+# **Output Format:**
+# ```json
+# {
+#   "startup_invest": {
+#     "loan_amount": 50000,
+#     "interest_rate": 9.8,
+#     "loan_duration_years": 2,
+#     "equipment_cost": 18000,  // Combine equipment and additional purchases
+#   },
+#   "fixed_costs": {
+#     "rent": 2500,
+#     "electricity": 400,
+#     "worker_wages": 4500,
+#     "supervisor_wage": 2250
+#   },
+#   "variable_costs": {
+#     "flour": {
+#       "quantity": 20,
+#       "unit": "bags",
+#       "cost_per_unit": 20
+#     },
+#     "salt": {
+#       "quantity": 5,
+#       "unit": "bags",
+#       "cost_per_unit": 2
+#     },
+#     "yeast": {
+#       "quantity": 5,
+#       "unit": "bags",
+#       "cost_per_unit": 15
+#     }
+#   },
+#   "revenue": {
+#     "unit_sales": {
+#       "daily": 600,
+#       "monthly": 18000
+#     },
+#     "unit_price": 1.89,
+#     "subscription_revenue": 500,
+#     "discounts": 50
+#   }
+# }
+
+# Each dictionary should take the format:
+# {
+#   "name": "Sample Text",
+#   "detail": "Sample Text",
+#   "amount": "6",
+#   "unit": null,
+#   "frequency": null,
+#   "period": null,
+#   "category": "startupInvestments",
+#   "type": "expenditure",
+#   "rate": null,
+#   "quantity": "6",
+#   "time": {
+#       "timerate": null,
+#       "perhour": null,
+#       "perday": null,
+#       "perweek": null,
+#       "permonth": null
+#   }
+# }
+
+
+
+
+# **Object Properties**:
+# - **category**: Type of category (either startupInvestments, fixedCosts, variableCosts, revenue).
+# - **type**: Specific type within the category (e.g., fund).
+# - **name**: Name of the item or investment.
+# - **detail**: Additional details or description.
+# - **amount**: Total monetary amount.
+# - **quantity**: Quantity of the item.
+# - **unit_info**: Additional info on unit.
+# - **unit**: Standard unit of measurement, either metric, imperial, or null.
+# - **billing_frequency**: Frequency of billing (once, daily, weekly, monthly, yearly).
+# - **amount_per_unit**: Amount per unit.
+# - **interest_rate**: Interest rate (for loans).
+# - **term_years**: Term in years (for loans).
+# - **currency**: Currency of amount.
+# - **working_time**: Period of time that a person spends at paid labor. It can be per hour, day, week.
+
+# **Example Output**:
+
+# **Final Answer**:
+
+# You have a set of useful functions at your disposal to solve the questions. Each function's usage is detailed in its docstring. You will generate the following JSON response:
+
+# "tool_choice": "name_of_the_tool",
+# "tool_input": "inputs_to_the_tool",
+
+# - `tool_choice`: The name of the tool you want to use (or "no tool" if no tool is suitable).
+# - `tool_input`: The specific inputs required for the selected tool. If no tool is needed, provide a response to the query, acknowledging potential limitations.
+
+# Here is a list of your tools along with their descriptions:
+# Instructions:
+# - Determine is the query is a valid business operation values query.
+# - If it is not the final answer should be "not a business operation question"
+# - If it is a business operation question. Do the following:
+#     - Identify and extract the relevant information based on info in categories.
+#     - Once catgorized, structure the extracted information into the specified JSON format descripted in output fromat
+#     - Put in result in Final Answer.
+
+# Extract and categorize business operation values (investment, fixed costs, variable costs, revenue) from query.
+
+# Categories:
+#     Startup Investments:
+#     - Loan Amount
+#     - Interest Rate
+#     - Loan Duration (years)
+#     - Equipment Cost
+#     - Other Investment Costs
+
+#     Fixed Costs:
+#     - Rent
+#     - Utilities (electricity, etc.)
+#     - Wages (worker, supervisor, etc.)
+#     - Insurance (if mentioned)
+#     - Other Fixed Costs
+
+#     Variable Costs:
+#     - Raw Materials (flour, salt, yeast, etc.)
+#     - Packaging
+#     - Shipping
+#     - Sales Commission
+#     - Other Variable Costs
+
+#     Revenue:
+#     - Unit Sales (loaves per day, total units per month)
+#     - Unit Price
+#     - Subscription Revenue
+#     - Discounts
+#     - Other Revenue Streams
+
+# Object Properties:
+#     - category: Type of category (either startupInvestments, fixedCosts, variableCosts, revenue).
+#     - type: Specific type within the category (e.g., fund).
+#     - name: Name of the item or investment.
+#     - detail: Additional details or description.
+#     - amount: Total monetary amount.
+#     - quantity: Quantity of the item.
+#     - unit_info: Additional info on unit.
+#     - unit**: Standard unit of measurement, either metric, imperial, or null.
+#     - billing_frequency: Frequency of billing (once, daily, weekly, monthly, yearly).
+#     - amount_per_unit: Amount per unit.
+#     - interest_rate: Interest rate (for loans).
+#     - term_years: Term in years (for loans).
+#     - currency: Currency of amount.
+#     - working_time: Period of time that a person spends at paid labor. It can be per hour, day, week.
+
+# Example Business Description: {example}
+
+# Output Format: Output the final answer as a key with a list of dictionaries or an empty list.
+# {schema}
+
+
+
+# {tool_descriptions}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Revised Prompt
+
+# **Task:** Determine if a given query presents a business operation problem or a potential business idea. If a business operation problem, follow the standard process. If a business idea, extract relevant data based on the provided schema.
+
+# **Categories:**
+# * Startup Investments: Loan Amount, Interest Rate, Loan Duration, Equipment Cost, Other Investment Costs
+# * Fixed Costs: Rent, Utilities, Wages, Insurance, Other Fixed Costs
+# * Variable Costs: Raw Materials, Packaging, Shipping, Sales Commission, Other Variable Costs
+# * Revenue: Unit Sales, Unit Price, Subscription Revenue, Discounts, Other Revenue Streams
+
+# **Object Properties:**
+# * category: Startup Investments, Fixed Costs, Variable Costs, Revenue
+# * type: Specific type within category
+# * name: Item or investment name
+# * detail: Additional description
+# * amount: Total monetary value
+# * quantity: Item quantity
+# * unit_info: Unit details
+# * unit: Measurement unit
+# * billing_frequency: Billing frequency
+# * amount_per_unit: Amount per unit
+# * interest_rate: interest rate
+# * term_years: loan term
+# * currency: currency
+# * working_time: labor time
+
+# **Example Data:**
+# * A business secured a £50,000 loan at 9.8% interest for 2 years to purchase equipment. Additional expenditures of £10,000 and £8,000 were for a food mixer and dough moulder, respectively. Monthly costs include £2,500 rent, £400 electricity, £4,500 for three workers (each earning £1,500), and £2,250 for a supervisor. Daily variable costs are £400 for flour (20 x 16kg bags at £20/bag), £10 for salt (5 x 1.5kg bags at £2/bag), and £75 for yeast (5 x 1kg bags at £15/bag). The business produces 600 loaves daily, selling each for £1.89. Projected monthly sales are 18,000 loaves, with additional £500 monthly subscription revenue and £50 in discounts.
+
+# **Business Output Schema:**
+# ```json
+# {schema}
+# ```
+
+# **Process:**
+# 1. **Thought:** Consider the query and its potential meaning.
+# 2. **Action:** Analyze the query for business operation keywords, business idea indicators, or data extraction needs.
+# 3. **PAUSE:** Halt the process temporarily.
+# 4. **Observation:** Determine if the query is a business operation problem, a potential business idea, or requires data extraction.
+# 5. **If business operation:** Follow standard process:
+#     * Analyze the query for business operation keywords or phrases related to the provided categories and properties.
+#     * Determine if the query can be mapped to the given structure. If so, it is a business operation problem.
+#     * Provide a final answer indicating whether the query is a business operation problem.
+# 6. **If business idea:** Extract relevant data based on the business output schema.
+#     * Identify potential business idea components from the query.
+#     * Extract corresponding data points from the example data based on the business output schema.
+#     * Create a structured output containing extracted data.
+# 7. **If neither:** Indicate that the query is not a business operation or business idea.
+
+# **Note:** The final answer should only be provided after determining if the query is a business operation problem or extracting relevant data for a business idea.
+
+
+# BUSINESS_PROMPT = """
+# The goal is to extract and categorize business operation values such as
+# investment costs, fixed costs, variable costs, and revenue from a given business description query.
+# Use the following structure and categories to guide your extraction process.
+
+# Business Description Example:
+# A business took a loan of £50000 at 9.8% for 2 years to purchase equipment.
+# Additional amounts of £10000 and £8000 were spent to purchase Food mixer and Dough Moulder.
+# The business pays rent at £2500, electricity at £400, 3 Workers wages at £1500 each, and 1 supervisor at £2250 monthly.
+# Daily cost of 20 16kg bags of flour at £20, 5 bags of 1.5kg salt at £2.00, 5 bags of 1kg of yeast at £15.
+# 600 loaves of bread are produced daily and sold at £1.89 each.
+# Projected sales volume of 18000 units per month. Subscription revenue at £500 per month.
+# Discounts affecting sales revenue by £50.
+
+# Categories:
+
+#     Startup Invest:
+#         Loan Amount: £50000
+#         Interest Rate: 9.8%
+#         Loan Duration: 2 years
+#         Equipment Cost: £10000
+#         Food Mixer Cost: £10000
+#         Dough Moulder Cost: £8000
+
+#     Fixed Costs:
+#         Rent: £2500
+#         Electricity: £400
+#         Worker Wages: 3 workers at £1500 each
+#         Supervisor Wage: £2250
+#         Insurance: (if provided)
+#         Utility Costs: (if provided)
+
+#     Variable Costs:
+#         Flour: 20 bags of 16kg at £20 each
+#         Salt: 5 bags of 1.5kg at £2 each
+#         Yeast: 5 bags of 1kg at £15 each
+#         Packaging Costs: (if provided)
+#         Shipping Costs: (if provided)
+#         Sales Commission: (if provided)
+
+#     Revenue:
+#         Loaves per Day: 600
+#         Price per Loaf: £1.89
+#         Projected Sales Volume: 18000 units per month
+#         Subscription Revenue: £500 per month
+#         Discounts: £50
+
+# Outpu JSON
+
+# JSON
+# {
+#   "startup_invest": {
+#     "loan_amount": 50000,
+#     "interest_rate": 9.8,
+#     "loan_duration_years": 2,
+#     "equipment_cost": 10000,
+#     "food_mixer_cost": 10000,
+#     "dough_moulder_cost": 8000
+#   },
+#   "fixed_costs": {
+#     "rent": 2500,
+#     "electricity": 400,
+#     "worker_wages": 4500,
+#     "supervisor_wage": 2250
+#   },
+#   "variable_costs": {
+#     "flour": {
+#       "bags": 20,
+#       "cost_per_bag": 20
+#     },
+#     "salt": {
+#       "bags": 5,
+#       "cost_per_bag": 2.0
+#     },
+#     "yeast": {
+#       "bags": 5,
+#       "cost_per_bag": 15
+#     }
+#   },
+#   "revenue": {
+#     "loaves_per_day": 600,
+#     "price_per_loaf": 1.89,
+#     "projected_sales_volume_per_month": 18000,
+#     "subscription_revenue_per_month": 500,
+#     "discounts": 50
+#   }
+# }
+
+# Instructions:
+#     Do not use tools
+#     Carefully read through the business description provided.
+#     Identify and extract the relevant information for each category (Startup Invest, Fixed Costs, Variable Costs, and Revenue).
+#     Structure the extracted information into the specified JSON format.
+#     Put in result in Final Answer.
+
+# """
+
+
+
+
+# {
+#   "$schema": "http://json-schema.org/draft-07/schema#",
+#   "type": "array",
+#   "items": {
+#     "type": "object",
+#     "properties": {
+#       "category": {
+#         "type": "string"
+#       },
+#       "type": {
+#         "type": "string"
+#       },
+#       "name": {
+#         "type": "string"
+#       },
+#       "detail": {
+#         "type": "string"
+#       },
+#       "amount": {
+#         "type": "number"
+#       },
+#       "quantity": {
+#         "type": "number"
+#       },
+#       "unit": {
+#         "type": "string"
+#       },
+#       "unit_info": {
+#         "type": "string"
+#       },
+#       "billing_frequency": {
+#         "type": "string"
+#       },
+#       "amount_per_unit": {
+#         "type": "number"
+#       },
+#       "interest_rate": {
+#         "type": "number"
+#       },
+#       "term_years": {
+#         "type": "number"
+#       },
+#       "currency": {
+#         "type": "string"
+#       },
+#       "working_time": {
+#         "type": "object",
+#         "properties": {
+#           "timerate": {
+#             "type": "number"
+#           },
+#           "perhour": {
+#             "type": "number"
+#           },
+#           "perday": {
+#             "type": "number"
+#           },
+#           "perweek": {
+#             "type": "number"
+#           },
+#           "permonth": {
+#             "type": "number"
+#           }
+#         }
+#       }
+#     },
+#     "additionalProperties": false
+#   }
+# }
+
+
+# BUSINESS_PROMPT = """
+# Objective: Extract and categorize business operation values (investment, fixed costs, variable costs, revenue) from a given text description.
+
+# **Example Business Description**: A business secured a £50,000 loan at 9.8% interest for 2 years to purchase equipment. Additional expenditures of £10,000 and £8,000 were for a food mixer and dough moulder, respectively. Monthly costs include £2,500 rent, £400 electricity, £4,500 for three workers (each earning £1,500), and £2,250 for a supervisor. Daily variable costs are £400 for flour (20 x 16kg bags at £20/bag), £10 for salt (5 x 1.5kg bags at £2/bag), and £75 for yeast (5 x 1kg bags at £15/bag). The business produces 600 loaves daily, selling each for £1.89. Projected monthly sales are 18,000 loaves, with additional £500 monthly subscription revenue and £50 in discounts.
+
+# **Categories**:
+
+# **Startup Investments**:
+# - Loan Amount
+# - Interest Rate
+# - Loan Duration (years)
+# - Equipment Cost
+# - Other Investment Costs
+
+# **Fixed Costs**:
+# - Rent
+# - Utilities (electricity, etc.)
+# - Wages (worker, supervisor, etc.)
+# - Insurance (if mentioned)
+# - Other Fixed Costs
+
+# **Variable Costs**:
+# - Raw Materials (flour, salt, yeast, etc.)
+# - Packaging
+# - Shipping
+# - Sales Commission
+# - Other Variable Costs
+
+# **Revenue**:
+# - Unit Sales (loaves per day, total units per month)
+# - Unit Price
+# - Subscription Revenue
+# - Discounts
+# - Other Revenue Streams
+
+# **Output Format**: Output the final answer as a key with a list of dictionaries or an empty list.
+
+# **Object Properties**:
+# - **category**: Type of category (either startupInvestments, fixedCosts, variableCosts, revenue).
+# - **type**: Specific type within the category (e.g., fund).
+# - **name**: Name of the item or investment.
+# - **detail**: Additional details or description.
+# - **amount**: Total monetary amount.
+# - **quantity**: Quantity of the item.
+# - **unit_info**: Additional info on unit.
+# - **unit**: Standard unit of measurement, either metric, imperial, or null.
+# - **billing_frequency**: Frequency of billing (once, daily, weekly, monthly, yearly).
+# - **amount_per_unit**: Amount per unit.
+# - **interest_rate**: Interest rate (for loans).
+# - **term_years**: Term in years (for loans).
+# - **currency**: Currency of amount.
+# - **working_time**: Period of time that a person spends at paid labor. It can be per hour, day, week,
+
+# **Example Output**:
+
+# **Final Answer**:
+# {business_output_schema}
+
+# {tool_descriptions}
+# """
+
+
+# business_output_schema = [
+#     {
+#         "category": "startupInvestments",
+#         "type": "loan",
+#         "name": "Loan for Equipment",
+#         "detail": "Secured loan to purchase equipment",
+#         "amount": "50000",
+#         "quantity": None,
+#         "unit": None,
+#         "unit_info": None,
+#         "billing_frequency": None,
+#         "amount_per_unit": None,
+#         "interest_rate": "9.8",
+#         "term_years": "2",
+#         "currency": "GBP",
+#         "working_time": {
+#             "timerate": None,
+#             "perhour": None,
+#             "perday": None,
+#             "perweek": None,
+#             "permonth": None
+#         }
+#     },
+#     {
+#         "category": "fixedCosts",
+#         "type": "expense",
+#         "name": "Rent",
+#         "detail": "Monthly rent payment",
+#         "amount": "2500",
+#         "quantity": None,
+#         "unit": None,
+#         "unit_info": None,
+#         "billing_frequency": "monthly",
+#         "amount_per_unit": None,
+#         "interest_rate": None,
+#         "term_years": None,
+#         "currency": "GBP"
+#     },
+#     {
+#         "category": "variableCosts",
+#         "type": "rawMaterial",
+#         "name": "Flour",
+#         "detail": "Daily cost for flour",
+#         "amount": "400",
+#         "quantity": "20",
+#         "unit": "kg",
+#         "unit_info": "16kg bags",
+#         "billing_frequency": "daily",
+#         "amount_per_unit": "20",
+#         "interest_rate": None,
+#         "term_years": None,
+#         "currency": "GBP"
+#     },
+#     {
+#         "category": "revenue",
+#         "type": "product",
+#         "name": "Loaves",
+#         "detail": "Daily production of loaves",
+#         "amount": "1134",
+#         "quantity": "600",
+#         "unit": None,
+#         "unit_info": None,
+#         "billing_frequency": "daily",
+#         "amount_per_unit": "1.89",
+#         "interest_rate": None,
+#         "term_years": None,
+#         "currency": "GBP"
+#     }
+# ]
