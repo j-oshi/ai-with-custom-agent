@@ -20,39 +20,23 @@ SUPPORTED_MODEL_APIS = {
 }
 
 class Agent:
-    def __init__(self, model_type, model_name, system_prompt, ai_tools):
+    def __init__(self, model_type, model_name, system_prompt, ai_tools=None, use_generate=False):
         self.model_type = SUPPORTED_MODEL_APIS.get(model_type)
         if not self.model_type:
             raise ValueError(f"Unsupported model API: {model_type}")
+        
         self.model_name = model_name
-        # self.ai_tools = ai_tools
-
-        # Generate tool descriptions
-        # tool_descriptions_list = self.ai_tools.list_functions()
-
-        # if not isinstance(tool_descriptions_list, list):
-            # raise ValueError(
-            #     "Tool descriptions must be a list of dictionaries.")
-
-        # Convert list of dictionaries to a formatted string
-        # tool_descriptions = "\n".join(
-        #     [f"Function: {tool['func_name']}\nDescription: {
-        #         tool['docstring']}" for tool in tool_descriptions_list]
-        # )
-
-        # # Ensure the placeholder exists in the prompt
-        # if "{tool_descriptions}" not in system_prompt:
-        #     raise ValueError(
-        #         "The system prompt is missing the '{tool_descriptions}' placeholder.")
-
-        # Use string replacement
-        # self.agent_system_prompt = system_prompt.replace(
-        #     "{tool_descriptions}", tool_descriptions)
+        self.use_generate = use_generate  # Flag to determine which API method to use
         self.model_instance = self.model_type(
             model=self.model_name, system=system_prompt)
 
     def execute_prompt(self, prompt):
-        agent_response_str = self.model_instance.chat(prompt)
+        if self.use_generate:
+            # Use the generate endpoint if the flag is set
+            agent_response_str = self.model_instance.generate(prompt)
+        else:
+            # Use the chat endpoint by default
+            agent_response_str = self.model_instance.chat(prompt)
 
         try:
             agent_response_dict = json.loads(agent_response_str)
@@ -70,10 +54,14 @@ class Agent:
             return agent_response_dict
 
     def execute_function(self, func_name, input_str):
+        if not self.ai_tools:
+            raise ValueError("AI tools are not provided.")
+        
         try:
             return self.ai_tools.execute_function(func_name, input_str)
         except Exception as e:
             raise ValueError(f"Error executing function '{func_name}': {e}")
+
 
 # class Agent:
 #     def __init__(self, model_type, model_name, system_prompt, ai_tools):
