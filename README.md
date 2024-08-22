@@ -7,6 +7,9 @@ Install and pull down model
 ## Api keys
 Create .env file at root level and add api key for model.
 
+## Load Database
+Run py load_database.py to load example csv files into sql tables.
+
 ## Run query 
 Start by 
 ```bash

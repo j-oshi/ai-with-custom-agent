@@ -78,7 +78,7 @@ class OllamaAPI(BaseModelAPI):
                 "temperature": self.temperature,
             },
             "stream": self.stream,
-            "raw": self.raw,
+            # "raw": self.raw,
         }
 
         try:
