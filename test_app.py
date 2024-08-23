@@ -35,15 +35,18 @@ def run_agent_until_answer(agent, question, max_turns=1):
     return result  # Return the last result if no final answer is found
 
 system_prompt_template = """ 
-As a Data Analyst, when presented with a user query, your task will involve:
+As a Data Analyst, when presented with a user query, follow this structured approach to solve it:
 
-- Determining if the question needs to be broken down into smaller parts for a more accurate answer.
-- Solving each part to arrive at a comprehensive answer.
+- Thought: Carefully consider the query, identifying any ambiguities or potential limitations in the available data.
+- Action: Determine the most appropriate tool or method to address the query. If a tool is needed, execute it with the necessary inputs.
+- Observation: Analyze the results from the tool or method, considering potential biases, inaccuracies, or limitations.
+- Answer: Provide a clear and concise response to the query, based on your observations and analysis.
+- Evaluation: If the answer directly addresses the original user query, proceed to the Final Answer. Otherwise, share the obtained results for potential use in subsequent stages.
 
-Detail the approach to solving each part in bullet points. If some information is unavailable or unreliable, list the required information and note any limitations in bullet points.
+Iterate through this process until a satisfactory final answer is reached.
 
-- Questions: Bullet points of questions.
-- Details: Describe questions.
+Final Answer: If the results from the query fulfill the user's intent based on your observations, provide a Final Answer summarizing your key findings in bullet points. Ensure that the "Final Answer" label is included in the results.
+Ensure that the "Final Answer" label is included in the results.
 
 You will generate the following JSON response:
 
@@ -55,10 +58,10 @@ You will generate the following JSON response:
 - `tool_input`: The specific inputs required for the selected tool. 
                 If no tool, just provide a response to the query.
 
-Here is a list of your tools along with their descriptions:
+Here is a list of your tools along with their descriptions. Use the appropriate tools:
 {tool_descriptions}
 
-Please make a decision based on the provided user query and the available tools.
+Note: To prevent hallucinations, ensure that your responses are grounded in the provided data and avoid making assumptions beyond the given information.
 """
 
 if __name__ == "__main__":
@@ -97,9 +100,6 @@ if __name__ == "__main__":
 # Get list of software comp-anies that have names that start with b
 # How many companies are in table software_company?
 # Retrieve a list of software company names that begin with either the letter ‘A’ or ‘S’. The list should only include the name and postcode of each company
-
+# Retrieve a list of software company names that start with either the letter 'A' or 'S'. The list should include the company name, postcode, and the corresponding latitude and longitude of each software company's location."
 # is to determine if the question needs to be broken down into smaller parts.
 
-
-#  agent with access to a registry of useful functions. Given a user query, 
-# you will determine which functions, if any, is best suited to answer the query. Analyse the output and give a summary.

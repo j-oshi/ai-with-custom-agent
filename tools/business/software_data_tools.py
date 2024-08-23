@@ -19,27 +19,40 @@ import sqlite3
 #     count = cursor.fetchone()[0]
 #     return count
 
+
 def query_database(sql_command):
-  """
-  This function takes an SQL command as a string and executes it against the 
-  software_company table. It returns a list of rows containing the 
-  results of the query.
+    """
+    Executes an SQL command against a SQLite database containing two related tables:
+    * **software_company** (name, postcode)
+    * **software_location** (postcode, latitude, longitude)
 
-  Args:
-      sql_command (str): The SQL command to execute.
+    Args:
+        sql_command (str or dict): The SQL command to execute. If a dictionary is provided, it must contain
+            a key named "sql_command" with the SQL command as its value.
 
-  Returns:
-      list: A list of rows containing the results of the query.
-  """
-  connection = None
-  try:
-    connection = sqlite3.connect("./data/software_companies.db")
-    cursor = connection.cursor()
-    cursor.execute(sql_command)
-    results = cursor.fetchall()
-    return results
-  except sqlite3.Error as error:
-    print("Error:", error)
-  finally:
-    if connection:
-      connection.close()
+    Returns:
+        list: A list of rows containing the results of the query.
+
+    Raises:
+        sqlite3.Error: If an error occurs while executing the SQL command.
+    """
+
+    connection = None
+
+    try:
+        if isinstance(sql_command, dict):
+            sql_command = sql_command["sql_command"]
+
+        connection = sqlite3.connect("./data/software_companies.db")
+        cursor = connection.cursor()
+        cursor.execute(sql_command)
+        results = cursor.fetchall()
+        return results
+
+    except sqlite3.Error as error:
+        print("Error:", error)
+        raise  # Re-raise the exception for proper error handling
+
+    finally:
+        if connection:
+            connection.close()
