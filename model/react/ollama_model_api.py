@@ -77,6 +77,7 @@ class OllamaAPI(BaseModelAPI):
             "options": {
                 "temperature": self.temperature,
             },
+            "format": "json",
             "stream": self.stream,
             # "raw": self.raw,
         }
@@ -84,45 +85,7 @@ class OllamaAPI(BaseModelAPI):
         try:
             response = requests.post(f"{self.model_endpoint}generate", headers=self.headers, data=json.dumps(payload))
             response_dict = response.json()
+
             return response_dict['response']
         except requests.RequestException as e:
             return {"error": f"Error invoking the model: {str(e)}"}
-
-# class OllamaAPI(BaseModelAPI):
-#     def __init__(self, model, system="", temperature=0, stream=False, raw=False):
-#         self.model = model
-#         self.system = system
-#         self.temperature = temperature
-#         self.stream = stream
-#         self.raw = raw
-#         self.messages = []
-#         self.model_endpoint = 'http://localhost:11434/api/chat'
-#         self.headers = {"Content-Type": "application/json"}
-#         if self.system:
-#             self.messages.append({"role": "system", "content": system})
-
-#     def chat(self, message):
-#         self.messages.append({"role": "user", "content": message})
-#         result = self.execute()
-#         self.messages.append({"role": "assistant", "content": result})
-#         return result
-
-#     def execute(self):
-#         payload = {
-#             "model": self.model,
-#             "format": "json",
-#             "messages": self.messages,
-#             "options": {
-#                 "temperature": self.temperature,
-#             },
-#             "stream": self.stream,
-#             "raw": self.raw,
-#         }
-
-#         try:
-#             response = requests.post(self.model_endpoint, headers=self.headers, data=json.dumps(payload))
-#             response_dict = response.json()
-
-#             return response_dict['message']['content']
-#         except requests.RequestException as e:
-#             return {"error": f"Error invoking the model: {str(e)}"}

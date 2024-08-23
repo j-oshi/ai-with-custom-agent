@@ -35,8 +35,15 @@ def run_agent_until_answer(agent, question, max_turns=1):
     return result  # Return the last result if no final answer is found
 
 system_prompt_template = """ 
-You are an analyst agent with access to a registry of useful functions. Given a user query, 
-you will determine which functions, if any, is best suited to answer the query. Analyse the output and give a summary.
+As a Data Analyst, when presented with a user query, your task will involve:
+
+- Determining if the question needs to be broken down into smaller parts for a more accurate answer.
+- Solving each part to arrive at a comprehensive answer.
+
+Detail the approach to solving each part in bullet points. If some information is unavailable or unreliable, list the required information and note any limitations in bullet points.
+
+- Questions: Bullet points of questions.
+- Details: Describe questions.
 
 You will generate the following JSON response:
 
@@ -89,3 +96,10 @@ if __name__ == "__main__":
 # Get a list of software companies that begin with the letter 's'.
 # Get list of software comp-anies that have names that start with b
 # How many companies are in table software_company?
+# Retrieve a list of software company names that begin with either the letter ‘A’ or ‘S’. The list should only include the name and postcode of each company
+
+# is to determine if the question needs to be broken down into smaller parts.
+
+
+#  agent with access to a registry of useful functions. Given a user query, 
+# you will determine which functions, if any, is best suited to answer the query. Analyse the output and give a summary.
