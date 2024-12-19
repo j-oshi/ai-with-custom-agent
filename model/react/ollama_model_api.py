@@ -64,6 +64,8 @@ class OllamaAPI(BaseModelAPI):
             response = requests.post(f"{self.model_endpoint}chat", headers=self.headers, data=json.dumps(payload))
             response_dict = response.json()
 
+            if 'message' not in response_dict:
+                return 'No result'
             return response_dict['message']['content']
         except requests.RequestException as e:
             return {"error": f"Error invoking the model: {str(e)}"}

@@ -39,9 +39,10 @@ def run_agent_until_answer(agent, question, max_turns=1):
 
 if __name__ == "__main__":
     model_type = "ollama_model_api"
-    model_name = "mistral-nemo:latest"
-    # model_name = "mistral:latest"
+    # model_name = "mistral-nemo:latest"
+    model_name = "mistral:latest"
     # model_name = "phi3:medium" 
+    # model_name = "tinyllama:latest"
     ai_tools = loader()
     # prompt_builder = PromptBuilder(
     #     goal=business_goal,
@@ -309,16 +310,17 @@ if __name__ == "__main__":
 
     while True:
         question = input("Enter question here (type 'exit' to quit): ")
+        
         if question.lower() == "exit":
             break
 
         # next_prompt = question
         # max_turns = 1
         # i = 0
-
-        result = run_agent_until_answer(agent, question, max_turns=1)
-        if not result:
-            continue
+        if len(question) > 0:
+            result = run_agent_until_answer(agent, question, max_turns=1)
+            if not result:
+                continue
 
         print(result)
         # while i < max_turns:

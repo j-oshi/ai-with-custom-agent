@@ -66,8 +66,8 @@ Note: To prevent hallucinations, ensure that your responses are grounded in the 
 
 if __name__ == "__main__":
     model_type = "ollama_model_api"
-    model_name = "mistral-nemo:latest"
-    # model_name = "mistral:latest"
+    # model_name = "mistral-nemo:latest"
+    model_name = "tinyllama:latest"
     # model_name = "phi3:medium" 
     ai_tools = loader()
 

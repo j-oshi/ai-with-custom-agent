@@ -75,6 +75,11 @@ class Agent:
         """
         agent_response_str = self.model_instance.generate(
             prompt) if self.use_generate else self.model_instance.chat(prompt)
+        
+        print('print error')
+        print(agent_response_str)
+        if agent_response_str == 'No result':
+            return {}
 
         try:
             agent_response_dict = json.loads(agent_response_str)
@@ -84,8 +89,6 @@ class Agent:
         func_name = agent_response_dict.get('tool_choice')
         func_input_str = agent_response_dict.get('tool_input')
 
-        print(func_name)
-        print(func_input_str)
         if func_name == "no tool":
             return agent_response_dict
         elif func_name and func_input_str:
